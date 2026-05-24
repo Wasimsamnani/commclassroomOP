@@ -1,0 +1,17 @@
+senwin:
+  url: https://www.senwin.co
+  username: YOUR_USERNAME
+  password: YOUR_PASSWORD
+
+polling_interval_minutes: 5
+
+alert_thresholds:
+  cash_low_percent: 15        # alert when cash level is below this %
+  sla_breach_minutes: 60      # alert when ATM has been offline longer than this
+
+twilio:
+  account_sid: YOUR_TWILIO_ACCOUNT_SID
+  auth_token: YOUR_TWILIO_AUTH_TOKEN
+  from_number: "whatsapp:+14155238886"   # Twilio sandbox or your approved number
+  to_numbers:
+    - "whatsapp:+1234567890"             # add recipient numbers here
