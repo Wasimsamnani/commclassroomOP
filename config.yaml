@@ -14,4 +14,4 @@ twilio:
   auth_token: YOUR_TWILIO_AUTH_TOKEN
   from_number: "whatsapp:+14155238886"   # Twilio sandbox or your approved number
   to_numbers:
-    - "whatsapp:+1234567890"             # add recipient numbers here
+    - "whatsapp:+13132036130"
