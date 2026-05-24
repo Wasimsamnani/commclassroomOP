@@ -22,7 +22,48 @@ def init_db():
                 PRIMARY KEY (atm_id, alert_type)
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS kiosk_state (
+                atm_id       TEXT PRIMARY KEY,
+                name         TEXT,
+                status       TEXT,
+                cash_percent REAL,
+                last_seen    TEXT,
+                error_code   TEXT,
+                updated_at   TEXT
+            )
+        """)
         conn.commit()
+
+
+def save_kiosk_states(atms: list[dict]):
+    now = datetime.utcnow().isoformat()
+    with get_conn() as conn:
+        conn.execute("DELETE FROM kiosk_state")
+        for atm in atms:
+            conn.execute(
+                """INSERT INTO kiosk_state
+                   (atm_id, name, status, cash_percent, last_seen, error_code, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (str(atm["id"]), atm.get("name", ""), atm.get("status", ""),
+                 atm.get("cash_percent"), atm.get("last_seen", ""),
+                 atm.get("error_code", ""), now),
+            )
+        conn.commit()
+
+
+def get_all_kiosk_states() -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute("SELECT * FROM kiosk_state ORDER BY name").fetchall()
+        return [dict(row) for row in rows]
+
+
+def get_active_alerts() -> list[dict]:
+    with get_conn() as conn:
+        rows = conn.execute(
+            "SELECT * FROM alert_state WHERE active=1 ORDER BY first_triggered_at DESC"
+        ).fetchall()
+        return [dict(row) for row in rows]
 
 
 def is_active(atm_id: str, alert_type: str) -> bool:

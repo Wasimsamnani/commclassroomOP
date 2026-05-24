@@ -2,3 +2,5 @@ playwright==1.44.0
 twilio==9.2.3
 apscheduler==3.10.4
 pyyaml==6.0.1
+flask==3.0.3
+gunicorn==22.0.0
